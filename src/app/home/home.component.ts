@@ -16,6 +16,8 @@ export class HomeComponent {
     public form: FormGroup;
     public currentModel: ColorModel = ColorModel.RGB;
     public rgbColor: RgbColor = new RgbColor(65, 19, 125);
+    public shouldRegisterCPEvents: boolean = true;
+    public shouldRegisterInp1Events: boolean = false;
     /**
      *
      */
@@ -43,10 +45,50 @@ export class HomeComponent {
             this.onModelChanged(prev, Number(e));
             this._cdr.detectChanges();
         });
-        //this.compactControl.setValueFrom();
         this.compactControl.valueChanges.subscribe((_) => {
             this.onColorPickerValueChanged(this.compactControl.value);
         });
+
+        this.first.valueChanges.subscribe((_) => {
+            this.form.markAllAsTouched();
+            this.form.updateValueAndValidity();
+            if (!this.form.valid) {
+                return;
+            }
+
+            this.updateReadonlyControlsFromInput();
+        });
+
+        this.second.valueChanges.subscribe((_)=>{
+            this.form.markAllAsTouched();
+            this.form.updateValueAndValidity();
+            if (!this.form.valid) {
+                return;
+            }
+
+            this.updateReadonlyControlsFromInput();
+        })
+
+        this.third.valueChanges.subscribe((_)=>{
+            this.form.markAllAsTouched();
+            this.form.updateValueAndValidity();
+            if (!this.form.valid) {
+                return;
+            }
+
+            this.updateReadonlyControlsFromInput();
+        })
+
+        this.fourth.valueChanges.subscribe((_)=>{
+            this.form.markAllAsTouched();
+            this.form.updateValueAndValidity();
+            if (!this.form.valid) {
+                return;
+            }
+
+            this.updateReadonlyControlsFromInput();
+        })
+
         this.updateColorInputControls();
         this.updateReadonlyControls();
     }
@@ -75,23 +117,19 @@ export class HomeComponent {
         return this.form.controls.secondReadonly;
     }
 
-    public get first()
-    {
+    public get first() {
         return this.form.controls.first;
     }
 
-    public get second()
-    {
+    public get second() {
         return this.form.controls.second;
     }
 
-    public get third()
-    {
+    public get third() {
         return this.form.controls.third;
     }
 
-    public get fourth()
-    {
+    public get fourth() {
         return this.form.controls.fourth;
     }
 
@@ -175,6 +213,71 @@ export class HomeComponent {
         this._cdr.detectChanges();
     }
 
+    public updateReadonlyControlsFromInput() {
+
+        let rgb: RgbColor;
+
+        switch (this.currentModel) {
+            case ColorModel.RGB:
+                {
+                    rgb = new RgbColor(this.getFirstControl().value, this.getSecondControl().value, this.getThirdControl().value);
+                    //this.setColorPickerValue(rgb);
+                    break;
+                }
+            case ColorModel.HSV:
+                {
+                    let h = this.getFirstControl().value;
+                    let s = this.getSecondControl().value / 100;
+                    let v = this.getThirdControl().value / 100;
+                    rgb = this._cs.HsvToRgb(new HsvColor(h, s, v));
+                    break;
+                }
+            case ColorModel.CMYK:
+                {
+                    let c = this.getFirstControl().value / 100;
+                    let m = this.getSecondControl().value / 100;
+                    let y = this.getThirdControl().value / 100;
+                    let k = this.getFourthControl().value / 100;
+                    rgb = this._cs.CmykToRgb(new CmykColor(c, m, y, k));
+                    break;
+                }
+        }
+
+
+        switch (this.currentModel) {
+            case ColorModel.RGB:
+                {
+                    let cmyk = this._cs.RgbToCmyk(new RgbColor(rgb.R, rgb.G, rgb.B));
+                    this.getSecondReadonlyControl().setValue((cmyk.C * 100).toFixed(2) + '%  ' + (cmyk.M * 100).toFixed(2) + '%  ' + (cmyk.Y * 100).toFixed(2) + '%  ' + (cmyk.K * 100).toFixed(2) + '%');
+
+                    let hsv = this._cs.RgbToHsv(new RgbColor(rgb.R, rgb.G, rgb.B));
+                    this.getFirstReadonlyControl().setValue(hsv.H.toFixed(2) + '°  ' + (hsv.S * 100).toFixed(2) + '%  ' + (hsv.V * 100).toFixed(2) + '%');
+                    break;
+                }
+            case ColorModel.CMYK:
+                {
+                    this.getFirstReadonlyControl().setValue(rgb.R.toFixed(2) + '  ' + rgb.G.toFixed(2) + '  ' + rgb.B.toFixed(2));
+
+                    // to hsv
+                    let hsv = this._cs.RgbToHsv(new RgbColor(rgb.R, rgb.G, rgb.B));
+                    this.getSecondReadonlyControl().setValue(hsv.H.toFixed(2) + '°  ' + (hsv.S * 100).toFixed(2) + '%  ' + (hsv.V * 100).toFixed(2) + '%');
+                    break;
+                }
+            case ColorModel.HSV:
+                {
+                    this.getFirstReadonlyControl().setValue(rgb.R.toFixed(2) + '  ' + rgb.G.toFixed(2) + '  ' + rgb.B.toFixed(2));
+
+                    // cmyk
+
+                    let cmyk = this._cs.RgbToCmyk(new RgbColor(rgb.R, rgb.G, rgb.B));
+                    this.getSecondReadonlyControl().setValue((cmyk.C * 100).toFixed(2) + '%  ' + (cmyk.M * 100).toFixed(2) + '%  ' + (cmyk.Y * 100).toFixed(2) + '%  ' + (cmyk.K * 100).toFixed(2) + '%');
+                    break;
+                }
+
+        }
+        this._cdr.detectChanges();
+    }
+
     public setColorPickerValue(color: RgbColor) {
         let rgba = this.compactControl.value.getRgba();
         rgba.red = color.R;
@@ -212,15 +315,13 @@ export class HomeComponent {
         this._cdr.detectChanges();
     }
 
-    public onCalculateClicked() 
-    {
+    public onCalculateClicked() {
         this.form.markAllAsTouched();
         this.form.updateValueAndValidity();
-        if(!this.form.valid)
-        {
+        if (!this.form.valid) {
             return;
         }
-        
+
         this.updateColorPickerControls();
     }
 
@@ -243,8 +344,7 @@ export class HomeComponent {
             }
 
         }
-        else if (prev == ColorModel.HSV)
-        {
+        else if (prev == ColorModel.HSV) {
             if (next == ColorModel.RGB) {
                 this.getFirstControl().setValue(Math.round(this.rgbColor.R));
                 this.getSecondControl().setValue(Math.round(this.rgbColor.G));
@@ -259,8 +359,7 @@ export class HomeComponent {
                 this.getFourthControl().setValue(Math.round(cmyk.K * 100));
             }
         }
-        else if (prev == ColorModel.CMYK)
-        {
+        else if (prev == ColorModel.CMYK) {
             if (next == ColorModel.HSV) {
                 let hsv = this._cs.RgbToHsv(this.rgbColor);
                 this.getFirstControl().setValue(Math.round(hsv.H));
@@ -356,32 +455,29 @@ export class HomeComponent {
         return (control: AbstractControl): ValidationErrors | null => {
             switch (this.currentModel) {
                 case ColorModel.RGB:
-                {
-                    let val = control.value;
-                    if(val < 0 || val > 255)
                     {
-                        return { value: 'Value must be from 0 to 255'};
+                        let val = control.value;
+                        if (val < 0 || val > 255) {
+                            return { value: 'Value must be from 0 to 255' };
+                        }
+                        return null;
                     }
-                    return null;
-                }
                 case ColorModel.HSV:
-                {
-                    let val = control.value;
-                    if(val < 0 || val > 360)
                     {
-                        return { value: 'Value must be from 0 to 360'};
+                        let val = control.value;
+                        if (val < 0 || val > 360) {
+                            return { value: 'Value must be from 0 to 360' };
+                        }
+                        return null;
                     }
-                    return null;
-                }
                 case ColorModel.CMYK:
-                {
-                    let val = control.value;
-                    if(val < 0 || val > 100)
                     {
-                        return { value: 'Value must be from 0 to 100'};
+                        let val = control.value;
+                        if (val < 0 || val > 100) {
+                            return { value: 'Value must be from 0 to 100' };
+                        }
+                        return null;
                     }
-                    return null;
-                }
             }
         };
     }
@@ -390,32 +486,29 @@ export class HomeComponent {
         return (control: AbstractControl): ValidationErrors | null => {
             switch (this.currentModel) {
                 case ColorModel.RGB:
-                {
-                    let val = control.value;
-                    if(val < 0 || val > 255)
                     {
-                        return { value: 'Value must be from 0 to 255'};
+                        let val = control.value;
+                        if (val < 0 || val > 255) {
+                            return { value: 'Value must be from 0 to 255' };
+                        }
+                        return null;
                     }
-                    return null;
-                }
                 case ColorModel.HSV:
-                {
-                    let val = control.value;
-                    if(val < 0 || val > 100)
                     {
-                        return { value: 'Value must be from 0 to 100'};
+                        let val = control.value;
+                        if (val < 0 || val > 100) {
+                            return { value: 'Value must be from 0 to 100' };
+                        }
+                        return null;
                     }
-                    return null;
-                }
                 case ColorModel.CMYK:
-                {
-                    let val = control.value;
-                    if(val < 0 || val > 100)
                     {
-                        return { value: 'Value must be from 0 to 100'};
+                        let val = control.value;
+                        if (val < 0 || val > 100) {
+                            return { value: 'Value must be from 0 to 100' };
+                        }
+                        return null;
                     }
-                    return null;
-                }
             }
         };
     }
@@ -424,32 +517,29 @@ export class HomeComponent {
         return (control: AbstractControl): ValidationErrors | null => {
             switch (this.currentModel) {
                 case ColorModel.RGB:
-                {
-                    let val = control.value;
-                    if(val < 0 || val > 255)
                     {
-                        return { value: 'Value must be from 0 to 255'};
+                        let val = control.value;
+                        if (val < 0 || val > 255) {
+                            return { value: 'Value must be from 0 to 255' };
+                        }
+                        return null;
                     }
-                    return null;
-                }
                 case ColorModel.HSV:
-                {
-                    let val = control.value;
-                    if(val < 0 || val > 100)
                     {
-                        return { value: 'Value must be from 0 to 100'};
+                        let val = control.value;
+                        if (val < 0 || val > 100) {
+                            return { value: 'Value must be from 0 to 100' };
+                        }
+                        return null;
                     }
-                    return null;
-                }
                 case ColorModel.CMYK:
-                {
-                    let val = control.value;
-                    if(val < 0 || val > 100)
                     {
-                        return { value: 'Value must be from 0 to 100'};
+                        let val = control.value;
+                        if (val < 0 || val > 100) {
+                            return { value: 'Value must be from 0 to 100' };
+                        }
+                        return null;
                     }
-                    return null;
-                }
             }
         };
     }
@@ -458,14 +548,13 @@ export class HomeComponent {
         return (control: AbstractControl): ValidationErrors | null => {
             switch (this.currentModel) {
                 case ColorModel.CMYK:
-                {
-                    let val = control.value;
-                    if(val < 0 || val > 100)
                     {
-                        return { value: 'Value must be from 0 to 100'};
+                        let val = control.value;
+                        if (val < 0 || val > 100) {
+                            return { value: 'Value must be from 0 to 100' };
+                        }
+                        return null;
                     }
-                    return null;
-                }
             }
             return null;
         };
