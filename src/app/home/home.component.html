@@ -1,0 +1,70 @@
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col-md-auto color-picker-margin">
+      <compact-picker [control]="compactControl"></compact-picker>
+    </div>
+    <div class="col-md-auto">
+      <form [formGroup]="form">
+        <div class="container">
+          <div class="row">
+            <div class="col col-lg-8 control-margin">
+              <select class="form-control" formControlName="modelSelect">
+                <option *ngFor="let model of colorModels" [value]="model">{{getUIModel(model)}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-lg-4 control-margin">
+              <label for="first">{{ getPlaceholder(1) }}</label>
+              <input type="number" id="first" class="form-control" [placeholder]="getPlaceholder(1)" formControlName="first">
+              <div *ngIf="first.errors?.['value']" class="invalid">
+                {{first.errors?.['value']}}
+              </div>
+            </div>
+            <div class="col col-lg-4 control-margin">
+              <label for="second">{{ getPlaceholder(2) }}</label>
+              <input type="number" id="second" class="form-control" [placeholder]="getPlaceholder(2)" formControlName="second">
+              <div *ngIf="second.errors?.['value']" class="invalid">
+                {{second.errors?.['value']}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-lg-4 control-margin">
+              <label for="third">{{ getPlaceholder(3) }}</label>
+              <input type="number" id="third" class="form-control" [placeholder]="getPlaceholder(3)" formControlName="third">
+              <div *ngIf="third.errors?.['value']" class="invalid">
+                {{third.errors?.['value']}}
+              </div>
+            </div>
+            <div class="col col-lg-4 control-margin">
+              <label for="fourth">{{ getPlaceholder(4) }}</label>
+              <input type="number" id="fourth" class="form-control" formControlName="fourth" [placeholder]="getPlaceholder(4)" [hidden]="showLastField()">
+              <div *ngIf="fourth.errors?.['value']" class="invalid">
+                {{fourth.errors?.['value']}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-lg-4 control-margin">
+              <button type="button" class="btn btn-primary" (click)="onCalculateClicked()">Calculate</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-lg-8 control-margin">
+              <label for="firstReadonly">{{ getReadonlyLabel(1) }}</label>
+              <input class="form-control" type="text" formControlName="firstReadonly" readonly>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-lg-8 control-margin">
+              <label for="secondReadonly">{{ getReadonlyLabel(2) }}</label>
+              <input class="form-control" type="text" formControlName="secondReadonly" readonly>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
