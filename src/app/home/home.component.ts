@@ -183,29 +183,29 @@ export class HomeComponent {
             case ColorModel.RGB:
                 {
                     let cmyk = this._cs.RgbToCmyk(new RgbColor(this.rgbColor.R, this.rgbColor.G, this.rgbColor.B));
-                    this.getSecondReadonlyControl().setValue((cmyk.C * 100).toFixed(2) + '%  ' + (cmyk.M * 100).toFixed(2) + '%  ' + (cmyk.Y * 100).toFixed(2) + '%  ' + (cmyk.K * 100).toFixed(2) + '%');
+                    this.getSecondReadonlyControl().setValue((cmyk.C * 100).toFixed(0) + '%  ' + (cmyk.M * 100).toFixed(0) + '%  ' + (cmyk.Y * 100).toFixed(0) + '%  ' + (cmyk.K * 100).toFixed(0) + '%');
 
                     let hsv = this._cs.RgbToHsv(new RgbColor(this.rgbColor.R, this.rgbColor.G, this.rgbColor.B));
-                    this.getFirstReadonlyControl().setValue(hsv.H.toFixed(2) + '°  ' + (hsv.S * 100).toFixed(2) + '%  ' + (hsv.V * 100).toFixed(2) + '%');
+                    this.getFirstReadonlyControl().setValue(hsv.H.toFixed(0) + '°  ' + (hsv.S * 100).toFixed(0) + '%  ' + (hsv.V * 100).toFixed(0) + '%');
                     break;
                 }
             case ColorModel.CMYK:
                 {
-                    this.getFirstReadonlyControl().setValue(this.rgbColor.R.toFixed(2) + '  ' + this.rgbColor.G.toFixed(2) + '  ' + this.rgbColor.B.toFixed(2));
+                    this.getFirstReadonlyControl().setValue(this.rgbColor.R.toFixed(0) + '  ' + this.rgbColor.G.toFixed(0) + '  ' + this.rgbColor.B.toFixed(0));
 
                     // to hsv
                     let hsv = this._cs.RgbToHsv(new RgbColor(this.rgbColor.R, this.rgbColor.G, this.rgbColor.B));
-                    this.getSecondReadonlyControl().setValue(hsv.H.toFixed(2) + '°  ' + (hsv.S * 100).toFixed(2) + '%  ' + (hsv.V * 100).toFixed(2) + '%');
+                    this.getSecondReadonlyControl().setValue(hsv.H.toFixed(0) + '°  ' + (hsv.S * 100).toFixed(0) + '%  ' + (hsv.V * 100).toFixed(0) + '%');
                     break;
                 }
             case ColorModel.HSV:
                 {
-                    this.getFirstReadonlyControl().setValue(this.rgbColor.R.toFixed(2) + '  ' + this.rgbColor.G.toFixed(2) + '  ' + this.rgbColor.B.toFixed(2));
+                    this.getFirstReadonlyControl().setValue(this.rgbColor.R.toFixed(0) + '  ' + this.rgbColor.G.toFixed(0) + '  ' + this.rgbColor.B.toFixed(0));
 
                     // cmyk
 
                     let cmyk = this._cs.RgbToCmyk(new RgbColor(this.rgbColor.R, this.rgbColor.G, this.rgbColor.B));
-                    this.getSecondReadonlyControl().setValue((cmyk.C * 100).toFixed(2) + '%  ' + (cmyk.M * 100).toFixed(2) + '%  ' + (cmyk.Y * 100).toFixed(2) + '%  ' + (cmyk.K * 100).toFixed(2) + '%');
+                    this.getSecondReadonlyControl().setValue((cmyk.C * 100).toFixed(0) + '%  ' + (cmyk.M * 100).toFixed(0) + '%  ' + (cmyk.Y * 100).toFixed(0) + '%  ' + (cmyk.K * 100).toFixed(0) + '%');
                     break;
                 }
 
@@ -248,29 +248,29 @@ export class HomeComponent {
             case ColorModel.RGB:
                 {
                     let cmyk = this._cs.RgbToCmyk(new RgbColor(rgb.R, rgb.G, rgb.B));
-                    this.getSecondReadonlyControl().setValue((cmyk.C * 100).toFixed(2) + '%  ' + (cmyk.M * 100).toFixed(2) + '%  ' + (cmyk.Y * 100).toFixed(2) + '%  ' + (cmyk.K * 100).toFixed(2) + '%');
+                    this.getSecondReadonlyControl().setValue((cmyk.C * 100).toFixed(0) + '%  ' + (cmyk.M * 100).toFixed(0) + '%  ' + (cmyk.Y * 100).toFixed(0) + '%  ' + (cmyk.K * 100).toFixed(0) + '%');
 
                     let hsv = this._cs.RgbToHsv(new RgbColor(rgb.R, rgb.G, rgb.B));
-                    this.getFirstReadonlyControl().setValue(hsv.H.toFixed(2) + '°  ' + (hsv.S * 100).toFixed(2) + '%  ' + (hsv.V * 100).toFixed(2) + '%');
+                    this.getFirstReadonlyControl().setValue(hsv.H.toFixed(0) + '°  ' + (hsv.S * 100).toFixed(0) + '%  ' + (hsv.V * 100).toFixed(0) + '%');
                     break;
                 }
             case ColorModel.CMYK:
                 {
-                    this.getFirstReadonlyControl().setValue(rgb.R.toFixed(2) + '  ' + rgb.G.toFixed(2) + '  ' + rgb.B.toFixed(2));
+                    this.getFirstReadonlyControl().setValue(rgb.R.toFixed(0) + '  ' + rgb.G.toFixed(0) + '  ' + rgb.B.toFixed(0));
 
                     // to hsv
                     let hsv = this._cs.RgbToHsv(new RgbColor(rgb.R, rgb.G, rgb.B));
-                    this.getSecondReadonlyControl().setValue(hsv.H.toFixed(2) + '°  ' + (hsv.S * 100).toFixed(2) + '%  ' + (hsv.V * 100).toFixed(2) + '%');
+                    this.getSecondReadonlyControl().setValue(hsv.H.toFixed(0) + '°  ' + (hsv.S * 100).toFixed(0) + '%  ' + (hsv.V * 100).toFixed(0) + '%');
                     break;
                 }
             case ColorModel.HSV:
                 {
-                    this.getFirstReadonlyControl().setValue(rgb.R.toFixed(2) + '  ' + rgb.G.toFixed(2) + '  ' + rgb.B.toFixed(2));
+                    this.getFirstReadonlyControl().setValue(rgb.R.toFixed(0) + '  ' + rgb.G.toFixed(0) + '  ' + rgb.B.toFixed(0));
 
                     // cmyk
 
                     let cmyk = this._cs.RgbToCmyk(new RgbColor(rgb.R, rgb.G, rgb.B));
-                    this.getSecondReadonlyControl().setValue((cmyk.C * 100).toFixed(2) + '%  ' + (cmyk.M * 100).toFixed(2) + '%  ' + (cmyk.Y * 100).toFixed(2) + '%  ' + (cmyk.K * 100).toFixed(2) + '%');
+                    this.getSecondReadonlyControl().setValue((cmyk.C * 100).toFixed(0) + '%  ' + (cmyk.M * 100).toFixed(0) + '%  ' + (cmyk.Y * 100).toFixed(0) + '%  ' + (cmyk.K * 100).toFixed(0) + '%');
                     break;
                 }
 
